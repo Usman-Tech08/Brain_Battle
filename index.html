@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainBattle V3 Ultimate</title>
+<style>
+:root{--bg:#f5f7ff;--card:#fff;--text:#182033;--muted:#6b7280;--primary:#635bff;--secondary:#a855f7;--green:#10b981;--red:#ef476f;--border:#e7e9f3}
+body.dark{--bg:#0b1020;--card:#151b30;--text:#f4f6ff;--muted:#aab1c5;--border:#29314d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Segoe UI,sans-serif;background:var(--bg);color:var(--text);transition:.25s}
+button,input,select{font:inherit}.app{max-width:1100px;margin:auto;padding:18px}.nav{display:flex;justify-content:space-between;align-items:center;padding:8px 0 22px}
+.logo{font-size:1.5rem;font-weight:900}.logo span{color:var(--primary)}.nav-actions{display:flex;gap:8px}.icon{border:1px solid var(--border);background:var(--card);color:var(--text);padding:11px 14px;border-radius:13px;cursor:pointer}
+.screen{display:none;animation:fade .35s}.screen.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{min-height:70vh;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:40px}.badge{display:inline-block;background:#635bff18;color:var(--primary);padding:9px 14px;border-radius:99px;font-weight:800}
+h1{font-size:clamp(3rem,7vw,5.7rem);line-height:.95;margin:18px 0;letter-spacing:-3px}.gradient{background:linear-gradient(120deg,var(--primary),var(--secondary));color:transparent;background-clip:text}
+p{color:var(--muted);line-height:1.65}.primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border:0;padding:15px 23px;border-radius:15px;font-weight:800;cursor:pointer;box-shadow:0 10px 28px #635bff35}.secondary{background:var(--card);color:var(--text);border:1px solid var(--border);padding:14px 20px;border-radius:15px;font-weight:800;cursor:pointer}
+.hero-art{display:grid;place-items:center;min-height:320px}.brain{font-size:7rem;width:250px;height:250px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 25px 70px #635bff55;animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-13px)}}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card,.panel{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:0 12px 35px #0000000c}.card b{font-size:1.5rem;color:var(--primary);display:block}.section-title{text-align:center;font-size:2rem;margin:10px 0 25px}
+.setup{max-width:900px;margin:auto}.choice{font-weight:900;margin:20px 0 10px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pick{padding:18px;border:1px solid var(--border);border-radius:17px;background:var(--card);color:var(--text);cursor:pointer;font-weight:800;text-align:center}.pick.selected{outline:3px solid var(--primary);background:#635bff12}.pick .emoji{font-size:1.8rem;display:block;margin-bottom:7px}
+.quiz{max-width:800px;margin:auto}.top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-weight:800}.progress{height:9px;background:var(--border);border-radius:99px;margin:18px 0;overflow:hidden}.progress i{height:100%;display:block;width:0;background:linear-gradient(90deg,var(--primary),var(--green));transition:.3s}
+.question{font-size:clamp(1.35rem,3vw,2rem);line-height:1.35}.answers{display:grid;gap:11px}.answer{padding:16px;text-align:left;background:transparent;border:2px solid var(--border);color:var(--text);border-radius:15px;font-weight:700;cursor:pointer}.answer:hover:not(:disabled){border-color:var(--primary)}.answer.correct{background:#10b98122;border-color:var(--green)}.answer.wrong{background:#ef476f18;border-color:var(--red)}
+.result{text-align:center;max-width:760px;margin:auto}.trophy{font-size:5rem}.big{font-size:4rem;font-weight:900;color:var(--primary)}.creator{display:flex;gap:22px;align-items:center;margin-top:35px}.creator img{width:105px;height:105px;border-radius:50%;object-fit:cover;border:4px solid #635bff44}
+.auth-box{max-width:480px;margin:30px auto}.auth-box input{width:100%;margin:7px 0;padding:14px;border-radius:13px;border:1px solid var(--border);background:var(--bg);color:var(--text)}.or{text-align:center;color:var(--muted);margin:12px}.leaderboard{max-width:800px;margin:auto}.leader{display:flex;align-items:center;justify-content:space-between;padding:15px;margin:9px 0;border-radius:15px;background:var(--card);border:1px solid var(--border)}.rank{font-weight:900;color:var(--primary);width:50px}.empty{text-align:center;color:var(--muted);padding:25px}
+.modal{position:fixed;inset:0;background:#0009;display:none;place-items:center;padding:20px;z-index:10}.modal.show{display:grid}.modal .panel{max-width:500px;width:100%;position:relative}.close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:var(--text);font-size:1.4rem;cursor:pointer}
+.notice{font-size:.85rem;padding:12px;border-radius:12px;background:#f59e0b18;color:var(--muted);margin:12px 0}.hidden{display:none!important}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--text);color:var(--bg);padding:12px 20px;border-radius:99px;font-weight:800;transition:.3s;z-index:30}.toast.show{transform:translateX(-50%) translateY(0)}
+footer{text-align:center;color:var(--muted);padding:35px 10px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center}.hero-art{order:-1}.cards{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.creator{flex-direction:column;text-align:center}.top{font-size:.9rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="nav">
+  <div class="logo">🧠 Brain<span>Battle</span> <small style="font-size:.55em;color:var(--muted)">V3 Ultimate</small></div>
+  <div class="nav-actions">
+    <button class="icon" id="musicBtn">🎵 Music: OFF</button>
+    <button class="icon" id="themeBtn">🌙</button>
+    <button class="icon" id="authBtn">👤 Login</button>
+  </div>
+</nav>
+
+<section id="home" class="screen active">
+<div class="hero">
+<div>
+<span class="badge">⚡ V3 Ultimate Online Quiz Arena</span>
+<h1>Think Fast.<br><span class="gradient">Battle Smarter.</span></h1>
+<p>Play challenging quizzes, beat the timer, save your best score and compete on the global BrainBattle leaderboard.</p>
+<button class="primary" onclick="showScreen('setup')">Start Battle 🚀</button>
+<button class="secondary" onclick="showScreen('leaderboard')" style="margin-left:8px">🏆 Leaderboard</button>
+<div class="cards" style="margin-top:28px">
+<div class="card"><b>6</b><small>Categories</small></div>
+<div class="card"><b>3</b><small>Levels</small></div>
+<div class="card"><b id="homeBest">0</b><small>Best Score</small></div>
+</div>
+</div>
+<div class="hero-art"><div class="brain">🧠</div></div>
+</div>
+<div class="panel creator">
+<img src="profile.jpg" alt="Creator">
+<div><b style="color:var(--primary)">CREATOR & WEB DEVELOPER</b><h2>💻 M. Usman Ali</h2><p>BrainBattle is an interactive learning and quiz platform designed and developed to make knowledge competitive and fun.</p></div>
+</div>
+</section>
+
+<section id="setup" class="screen">
+<h2 class="section-title">⚔️ Setup Your Battle</h2>
+<div class="setup panel">
+<div class="choice">Choose Category</div><div id="catGrid" class="grid"></div>
+<div class="choice">Choose Difficulty</div>
+<div id="levelGrid" class="grid">
+<button class="pick selected" data-level="easy">😊 Easy</button><button class="pick" data-level="medium">😎 Medium</button><button class="pick" data-level="hard">🔥 Hard</button>
+</div>
+<div style="text-align:center;margin-top:25px"><button class="primary" id="startBtn">Start Quiz ⚡</button></div>
+</div>
+</section>
+
+<section id="quiz" class="screen">
+<div class="quiz"><div class="panel">
+<div class="top"><span id="qNo">Question 1/5</span><span>⏱️ <b id="time">15</b>s</span><span>⭐ Score: <b id="score">0</b></span><span>🔥 Streak: <b id="streak">0</b></span></div>
+<div class="progress"><i id="progress"></i></div>
+<h2 class="question" id="question"></h2><div class="answers" id="answers"></div>
+</div></div>
+</section>
+
+<section id="result" class="screen">
+<div class="result">
+<div class="trophy">🏆</div><h2>Battle Complete!</h2><div class="big" id="final">0/5</div>
+<p id="rankText"></p>
+<div class="cards"><div class="card">Correct<b id="correctN">0</b></div><div class="card">Accuracy<b id="accuracy">0%</b></div><div class="card">Score<b id="finalPoints">0</b></div></div>
+<div style="margin-top:22px"><button class="primary" id="saveScoreBtn">☁️ Save to Global Leaderboard</button><button class="secondary" onclick="showScreen('setup')" style="margin-left:8px">Play Again 🔄</button></div>
+<p class="notice">To save scores online, first configure Firebase and create an account.</p>
+</div>
+</section>
+
+<section id="leaderboard" class="screen">
+<h2 class="section-title">🏆 Global Leaderboard</h2>
+<div class="leaderboard panel"><div id="leaderList" class="empty">Loading leaderboard...</div><div style="text-align:center;margin-top:18px"><button class="secondary" onclick="showScreen('home')">🏠 Back Home</button></div></div>
+</section>
+<footer>© 2026 BrainBattle V3 Ultimate • Designed & Developed by M. Usman Ali</footer>
+</div>
+
+<div class="modal" id="authModal"><div class="panel auth-box"><button class="close" onclick="closeAuth()">×</button>
+<h2>👤 BrainBattle Account</h2><p id="authStatus">Login or create an account to join the global leaderboard.</p>
+<input id="nameInput" placeholder="Display name (for signup)">
+<input id="emailInput" type="email" placeholder="Email">
+<input id="passInput" type="password" placeholder="Password (min 6 characters)">
+<button class="primary" style="width:100%;margin-top:8px" id="loginBtn">Login</button>
+<div class="or">or</div><button class="secondary" style="width:100%" id="signupBtn">Create Account</button>
+<button class="secondary hidden" style="width:100%;margin-top:10px" id="logoutBtn">Logout</button>
+<div class="notice">Firebase setup is required before online login works.</div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* =========================
+   FIREBASE CONFIGURATION
+   1. Go to https://console.firebase.google.com/
+   2. Create a project
+   3. Add a Web App
+   4. Copy firebaseConfig below
+   ========================= */
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
+  projectId: "PASTE_YOUR_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+const firebaseReady = !firebaseConfig.apiKey.startsWith("PASTE_");
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+let auth=null, db=null, currentUser=null;
+if(firebaseReady){
+  try{
+    const app=initializeApp(firebaseConfig); auth=getAuth(app); db=getFirestore(app);
+    onAuthStateChanged(auth,user=>{currentUser=user; updateAuthUI();});
+  }catch(e){console.error(e); toast("Firebase configuration error");}
+}
+
+const bank={
+science:[["Red Planet?",["Mars","Venus","Jupiter","Mercury"],0],["SI unit of force?",["Joule","Watt","Newton","Pascal"],2],["Gas plants absorb?",["Oxygen","Carbon dioxide","Hydrogen","Helium"],1],["Cell genetic control center?",["Nucleus","Ribosome","Membrane","Vacuole"],0],["H₂O is?",["Salt","Water","Oxygen","Acid"],1]],
+technology:[["CPU stands for?",["Central Processing Unit","Computer Power Unit","Central Program Utility","Control Processing User"],0],["Web page structure uses?",["HTML","CSS","SQL","Python"],0],["HTTP 404 means?",["Success","Redirect","Not Found","Server OK"],2],["CSS controls?",["Styling and layout","Database","Hardware","Internet speed"],0],["Git is mainly for?",["Version control","Video editing","Gaming","Printing"],0]],
+pakistan:[["Capital of Pakistan?",["Lahore","Karachi","Islamabad","Peshawar"],2],["Pakistan independence year?",["1940","1947","1956","1971"],1],["National animal?",["Lion","Markhor","Tiger","Horse"],1],["Highest mountain?",["Nanga Parbat","K2","Rakaposhi","Everest"],1],["Largest province by area?",["Punjab","Sindh","KPK","Balochistan"],3]],
+general:[["Largest ocean?",["Atlantic","Indian","Pacific","Arctic"],2],["Leap year days?",["364","365","366","367"],2],["Continents?",["5","6","7","8"],2],["Largest mammal?",["Elephant","Blue whale","Giraffe","Shark"],1],["Currency of Japan?",["Won","Yuan","Yen","Rupee"],2]],
+math:[["12 × 8 = ?",["86","96","104","88"],1],["√81 = ?",["7","8","9","10"],2],["25% of 200?",["25","50","75","100"],1],["3x + 6 = 21; x = ?",["3","5","7","9"],1],["2⁵ = ?",["10","16","25","32"],3]],
+english:[["Plural of child?",["Childs","Children","Childes","Childrens"],1],["Past tense of go?",["Goed","Gone","Went","Going"],2],["Synonym of happy?",["Sad","Joyful","Angry","Tired"],1],["Which is an adverb?",["Slow","Slowly","Beauty","House"],1],["Question punctuation?",[".","!", "?", ";"],2]]
+};
+const cats=[["science","🔬","Science"],["technology","💻","Technology"],["pakistan","🇵🇰","Pakistan"],["general","🌍","General"],["math","➗","Math"],["english","📖","English"]];
+let category="science",level="easy",questions=[],idx=0,points=0,correct=0,streak=0,time=15,timer=null,locked=false;
+const $=x=>document.getElementById(x);
+window.showScreen=id=>{document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");if(id==="leaderboard")loadLeaderboard();window.scrollTo({top:0,behavior:"smooth"});}
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const toast=m=>{$("toast").textContent=m;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1800);}
+function init(){
+ $("catGrid").innerHTML=cats.map((c,i)=>`<button class="pick ${i===0?"selected":""}" data-cat="${c[0]}"><span class="emoji">${c[1]}</span>${c[2]}</button>`).join("");
+ document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{category=b.dataset.cat;document.querySelectorAll("[data-cat]").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")});
+ document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>{level=b.dataset.level;document.querySelectorAll("[data-level]").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")});
+ $("homeBest").textContent=localStorage.bbBest||0;
+}
+$("startBtn").onclick=()=>{questions=shuffle(bank[category]).slice(0,5);idx=points=correct=streak=0;showScreen("quiz");render();}
+function render(){
+ clearInterval(timer);locked=false;time=15;const q=questions[idx];
+ $("qNo").textContent=`Question ${idx+1}/${questions.length}`;$("time").textContent=time;$("score").textContent=points;$("streak").textContent=streak;$("progress").style.width=(idx/questions.length*100)+"%";$("question").textContent=q[0];
+ $("answers").innerHTML=shuffle(q[1].map((t,i)=>({t,i}))).map(o=>`<button class="answer" data-i="${o.i}">${o.t}</button>`).join("");
+ document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+ timer=setInterval(()=>{time--;$("time").textContent=time;if(time<=0){clearInterval(timer);answer(-1)}},1000);
+}
+function beep(ok){if(!musicOn)return;try{let c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.frequency.value=ok?650:180;g.gain.value=.06;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.13)}catch(e){}}
+function answer(a){
+ if(locked)return;locked=true;clearInterval(timer);let q=questions[idx],ok=a===q[2];
+ document.querySelectorAll(".answer").forEach(b=>{b.disabled=true;if(+b.dataset.i===q[2])b.classList.add("correct");else if(+b.dataset.i===a)b.classList.add("wrong")});
+ if(ok){correct++;streak++;points+=10+Math.min(streak*2,10);toast("🔥 Correct!");}else{streak=0;toast(a===-1?"⏰ Time up!":"❌ Wrong!");}beep(ok);
+ $("score").textContent=points;$("streak").textContent=streak;
+ setTimeout(()=>{idx++;idx<questions.length?render():finish();},1000);
+}
+function finish(){
+ let best=Math.max(+localStorage.bbBest||0,points);localStorage.bbBest=best;$("homeBest").textContent=best;
+ $("final").textContent=`${correct}/${questions.length}`;$("correctN").textContent=correct;$("accuracy").textContent=Math.round(correct/questions.length*100)+"%";$("finalPoints").textContent=points;
+ let p=correct/questions.length;$("rankText").textContent=p===1?"👑 Perfect! BrainBattle Legend!":p>=.8?"🔥 Excellent! Quiz Master!":p>=.6?"⚡ Great job! Keep improving!":"🧠 Nice try! Practice makes stronger.";
+ showScreen("result");
+}
+
+// Music generated with Web Audio: no external copyrighted audio file
+let musicOn=false,musicTimer=null,musicStep=0;
+const melody=[261.63,329.63,392,523.25,392,329.63,293.66,349.23];
+function playTone(f,d=.22){try{let c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.frequency.value=f;o.type="sine";g.gain.setValueAtTime(.025,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
+$("musicBtn").onclick=()=>{musicOn=!musicOn;$("musicBtn").textContent=`🎵 Music: ${musicOn?"ON":"OFF"}`;if(musicOn){musicTimer=setInterval(()=>playTone(melody[musicStep++%melody.length]),350);toast("Music ON 🎵")}else{clearInterval(musicTimer);toast("Music OFF");}};
+$("themeBtn").onclick=()=>{document.body.classList.toggle("dark");$("themeBtn").textContent=document.body.classList.contains("dark")?"☀️":"🌙";};
+
+window.closeAuth=()=>{$("authModal").classList.remove("show")}
+$("authBtn").onclick=()=>{$("authModal").classList.add("show");}
+function updateAuthUI(){
+ if(currentUser){$("authBtn").textContent="👤 "+(currentUser.displayName||currentUser.email.split("@")[0]);$("authStatus").textContent="Logged in as "+currentUser.email;$("logoutBtn").classList.remove("hidden");}
+ else{$("authBtn").textContent="👤 Login";$("logoutBtn").classList.add("hidden");}
+}
+$("signupBtn").onclick=async()=>{
+ if(!firebaseReady)return toast("First add Firebase config in index.html");
+ let email=$("emailInput").value,password=$("passInput").value,name=$("nameInput").value.trim()||"Player";
+ try{let r=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(r.user,{displayName:name});toast("Account created! 🎉");closeAuth();}catch(e){toast(e.message.replace("Firebase: ",""))}
+};
+$("loginBtn").onclick=async()=>{
+ if(!firebaseReady)return toast("First add Firebase config in index.html");
+ try{await signInWithEmailAndPassword(auth,$("emailInput").value,$("passInput").value);toast("Welcome back! 🚀");closeAuth();}catch(e){toast(e.message.replace("Firebase: ",""))}
+};
+$("logoutBtn").onclick=async()=>{if(auth){await signOut(auth);toast("Logged out");closeAuth();}};
+$("saveScoreBtn").onclick=async()=>{
+ if(!firebaseReady)return toast("Firebase config required first");
+ if(!currentUser){$("authModal").classList.add("show");return toast("Please login first");}
+ try{
+   await addDoc(collection(db,"leaderboard"),{name:currentUser.displayName||currentUser.email.split("@")[0],score:points,category,level,uid:currentUser.uid,createdAt:serverTimestamp()});
+   toast("🏆 Score saved globally!"); 
+ }catch(e){console.error(e);toast("Could not save. Check Firestore rules.");}
+};
+async function loadLeaderboard(){
+ let box=$("leaderList");if(!firebaseReady){box.innerHTML="<div class='empty'>⚙️ Configure Firebase to activate the real global leaderboard.</div>";return}
+ try{
+   const q=query(collection(db,"leaderboard"),orderBy("score","desc"),limit(20)),snap=await getDocs(q);
+   if(snap.empty){box.innerHTML="<div class='empty'>No scores yet. Be the first champion! 🏆</div>";return}
+   box.innerHTML=snap.docs.map((d,i)=>{let x=d.data();return `<div class="leader"><span class="rank">#${i+1}</span><span style="flex:1;font-weight:800">${escapeHtml(x.name||"Player")}</span><span>🏆 ${x.score||0}</span></div>`}).join("");
+ }catch(e){box.innerHTML="<div class='empty'>Could not load leaderboard. Check Firestore setup and rules.</div>";}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+init();
+</script>
+</body>
+</html>
