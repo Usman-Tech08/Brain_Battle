@@ -10,7 +10,17 @@
 body.dark{--bg:#0b1020;--card:#151b30;--text:#f4f6ff;--muted:#aab1c5;--border:#29314d}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Segoe UI,sans-serif;background:var(--bg);color:var(--text);transition:.25s}
 button,input,select{font:inherit}.app{max-width:1100px;margin:auto;padding:18px}.nav{display:flex;justify-content:space-between;align-items:center;padding:8px 0 22px}
-.logo{font-size:1.5rem;font-weight:900}.logo span{color:var(--primary)}.nav-actions{display:flex;gap:8px}.icon{border:1px solid var(--border);background:var(--card);color:var(--text);padding:11px 14px;border-radius:13px;cursor:pointer}
+.logo{font-size:1.5rem;font-weight:900}.logo span{color:var(--primary)}
+    .logo img{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    vertical-align:middle;
+    margin-right:8px;
+    cursor:pointer;
+}
+    .nav-actions{display:flex;gap:8px}.icon{border:1px solid var(--border);background:var(--card);color:var(--text);padding:11px 14px;border-radius:13px;cursor:pointer}
 .screen{display:none;animation:fade .35s}.screen.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .hero{min-height:70vh;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:40px}.badge{display:inline-block;background:#635bff18;color:var(--primary);padding:9px 14px;border-radius:99px;font-weight:800}
 h1{font-size:clamp(3rem,7vw,5.7rem);line-height:.95;margin:18px 0;letter-spacing:-3px}.gradient{background:linear-gradient(120deg,var(--primary),var(--secondary));color:transparent;background-clip:text}
@@ -31,7 +41,11 @@ footer{text-align:center;color:var(--muted);padding:35px 10px}
 <body>
 <div class="app">
 <nav class="nav">
-  <div class="logo">🧠 Brain<span>Battle</span> <small style="font-size:.55em;color:var(--muted)">V3 Ultimate</small></div>
+  <div class="logo">
+    <img src="logo.jpeg" alt="Brain Battle Logo">
+    Brain<span>Battle</span>
+    <small style="font-size:.55em;color:var(--muted)">V3 Ultimate</small>
+</div>
   <div class="nav-actions">
     <button class="icon" id="musicBtn">🎵 Music: OFF</button>
     <button class="icon" id="themeBtn">🌙</button>
