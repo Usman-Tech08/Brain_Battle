@@ -36,10 +36,54 @@ p{color:var(--muted);line-height:1.65}.primary{background:linear-gradient(135deg
 .notice{font-size:.85rem;padding:12px;border-radius:12px;background:#f59e0b18;color:var(--muted);margin:12px 0}.hidden{display:none!important}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--text);color:var(--bg);padding:12px 20px;border-radius:99px;font-weight:800;transition:.3s;z-index:30}.toast.show{transform:translateX(-50%) translateY(0)}
 footer{text-align:center;color:var(--muted);padding:35px 10px}
 @media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center}.hero-art{order:-1}.cards{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.creator{flex-direction:column;text-align:center}.top{font-size:.9rem}}
-</style>
+/* Logo Expand Modal */
+.logo img{
+    cursor:pointer;
+}
+
+.logo-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    transition:opacity .3s ease;
+}
+
+.logo-modal.show{
+    display:flex;
+    opacity:1;
+}
+
+.logo-modal img{
+    width:min(80vw,500px);
+    max-height:80vh;
+    object-fit:contain;
+    border-radius:20px;
+    animation:logoZoom .35s ease;
+    box-shadow:0 0 40px rgba(99,91,255,.5);
+}
+
+@keyframes logoZoom{
+    from{
+        transform:scale(.5);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+  </style>
 </head>
 <body>
-<div class="app">
+<div class="logo-modal" id="logoModal">
+    <img src="logo.jpeg" alt="Brain Battle Logo">
+</div>
+  <div class="app">
 <nav class="nav">
   <div class="logo">
     <img src="logo.jpeg" alt="Brain Battle Logo">
@@ -240,6 +284,18 @@ async function loadLeaderboard(){
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 init();
+</script>
+<script>
+const logo = document.querySelector('.logo img');
+const logoModal = document.getElementById('logoModal');
+
+logo.addEventListener('click', () => {
+    logoModal.classList.add('show');
+});
+
+logoModal.addEventListener('click', () => {
+    logoModal.classList.remove('show');
+});
 </script>
 </body>
 </html>
