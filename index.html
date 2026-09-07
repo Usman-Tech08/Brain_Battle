@@ -77,10 +77,66 @@ footer{text-align:center;color:var(--muted);padding:35px 10px}
         opacity:1;
     }
 }
+ /* Loading Screen */
+#loadingScreen{
+    position:fixed;
+    inset:0;
+    background:#081020;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    transition:opacity .6s ease, visibility .6s ease;
+}
+
+#loadingScreen.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loading-logo{
+    width:120px;
+    height:120px;
+    border-radius:25px;
+    object-fit:cover;
+    animation:loadingPulse 1s ease-in-out infinite;
+}
+
+.loading-title{
+    margin-top:18px;
+    font-size:2rem;
+    font-weight:900;
+    letter-spacing:3px;
+    background:linear-gradient(90deg,#635bff,#a855f7);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.loading-by{
+    margin-top:8px;
+    color:#aab1c5;
+    font-size:1rem;
+    letter-spacing:1px;
+}
+
+@keyframes loadingPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.08);
+    }
+}
   </style>
 </head>
 <body>
-<div class="logo-modal" id="logoModal">
+<div id="loadingScreen">
+    <img src="logo.jpeg" class="loading-logo" alt="Brain Battle">
+    <div class="loading-title">BRAIN BATTLE</div>
+    <div class="loading-by">by UsmanTech08</div>
+</div>
+  <div class="logo-modal" id="logoModal">
     <img src="logo.jpeg" alt="Brain Battle Logo">
 </div>
   <div class="app">
@@ -296,6 +352,9 @@ logo.addEventListener('click', () => {
 logoModal.addEventListener('click', () => {
     logoModal.classList.remove('show');
 });
+setTimeout(() => {
+    document.getElementById('loadingScreen').classList.add('hide');
+}, 2000);
 </script>
 </body>
 </html>
